@@ -76,9 +76,12 @@ var app = app || {};
   Article.allAuthors = () => {
     return Article.all.map(function(article){return article.author})
     .reduce(
-      function(acc, cur){if(acc.indexOf(cur)=== -1){
-        acc.push(cur)
-      }}, [] );
+      function(acc, cur){
+        if(acc.indexOf(cur)===-1){
+          acc.push(cur);
+        }
+        return acc
+      }, []);
   };
 
   Article.numWordsByAuthor = () => {
@@ -90,16 +93,17 @@ var app = app || {};
       // The first property should be pretty straightforward, but you will need to chain
       // some combination of filter, map, and reduce to get the value for the second
       // property.
-      Article.all.filter(function(article){
-        if(article.author === author)
-          return true;
-      })
-      .map(function(data){
-        return data.body.split(' ').length
-      })
-      .reduce(function (a, b) {
-        return a + b
-      })
+      return
+      {
+        name: author,
+        words: Article.all.filter(function(article){
+                  return article.author === author
+                }).map(function(data){
+                  return data.body.split(' ').length
+                }).reduce(function (a, b) {
+                  return a + b;
+                })
+      }
     })
   };
 
