@@ -44,7 +44,7 @@ var app = app || {};
     // There is no need to push to anything.
     Article.all = rows.map(function(row){
       return new Article(row);
-    });
+    })
 
     /* OLD forEach():
     rawData.forEach(function(ele) {
@@ -67,25 +67,24 @@ var app = app || {};
   // DONE: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
   Article.numWordsAll = () => {
     return Article.all
-      .map(function(article){ return article.body.split(' ').length })
-      .reduce(function(a, b){ return a + b })
+      .map(function(article){ return article.body.split(' ').length;})
+      .reduce(function(a, b){ return a + b;})
   };
 
   // DONE: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
   // probably need to use the optional accumulator argument in your reduce call.
   Article.allAuthors = () => {
-    return Article.all.map(function(article){return article.author})
-    .reduce(
-      function(acc, cur){
-        if(acc.indexOf(cur)===-1){
-          acc.push(cur);
-        }
-        return acc
-      }, []);
+    return Article.all.map(article => article.author)
+                      .reduce((acc, cur) => {
+                        if(acc.indexOf(cur)===-1){
+                          acc.push(cur)
+                        }
+                        return acc
+                      }, []);
   };
 
   Article.numWordsByAuthor = () => {
-    return Article.allAuthors().map(author => {
+    return Article.allAuthors().map(author => { return {
       // DONE: Transform each author string into an object with properties for
       // the author's name, as well as the total number of words across all articles
       // written by the specified author.
@@ -93,17 +92,12 @@ var app = app || {};
       // The first property should be pretty straightforward, but you will need to chain
       // some combination of filter, map, and reduce to get the value for the second
       // property.
-      return
-      {
-        name: author,
-        words: Article.all.filter(function(article){
-                  return article.author === author
-                }).map(function(data){
-                  return data.body.split(' ').length
-                }).reduce(function (a, b) {
-                  return a + b;
-                })
-      }
+
+      name: author,
+      words: Article.all.filter(article => article.author === author)
+                             .map(data => data.body.split(' ').length)
+                             .reduce((a, b) => a + b)
+    }
     })
   };
 
